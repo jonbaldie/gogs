@@ -10,6 +10,7 @@ Gogs is written in [Go](https://golang.org/), please take [A Tour of Go](https:/
 - [Step 3: Get the code](#step-3-get-the-code)
 - [Step 4: Configure database settings](#step-4-configure-database-settings)
 - [Step 5: Start the server](#step-5-start-the-server)
+- [Linting](#linting)
 - [Other nice things](#other-nice-things)
 
 ## Environment
@@ -150,6 +151,22 @@ task web --watch
 ```
 
 **NOTE** If you changed any file under `conf/`, `template/` or `public/` directory, be sure to run `task generate` afterwards!
+
+## Linting
+
+Run the lint gate before sending changes for review:
+
+```bash
+task lint
+```
+
+If `task` is not installed, use Go to run the pinned Task runner without changing the repository:
+
+```bash
+go run github.com/go-task/task/v3/cmd/task@v3.45.4 lint
+```
+
+The lint task runs a pinned `golangci-lint` version through `go run`, so workers do not need a host-installed `golangci-lint` binary.
 
 ## Other nice things
 
