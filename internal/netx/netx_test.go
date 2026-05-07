@@ -14,6 +14,7 @@ func TestIsBlockedLocalHostname(t *testing.T) {
 		want      bool
 	}{
 		{name: "loopback IPv4", hostname: "127.0.0.1", want: true},
+		{name: "localhost", hostname: "localhost", want: true},
 		{name: "loopback IPv6", hostname: "::1", want: true},
 		{name: "expanded loopback IPv6", hostname: "0:0:0:0:0:0:0:1", want: true},
 		{name: "loopback IPv4 range", hostname: "127.0.0.95", want: true},
