@@ -1,6 +1,8 @@
 package database
 
 import (
+	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -66,9 +68,20 @@ func TestSSHParsePublicKey(t *testing.T) {
 			assert.Equal(t, test.expLength, length)
 
 			typ, length, err = SSHKeygenParsePublicKey(test.content, tempPath, "ssh-keygen")
+			if test.expType == "dsa" && err != nil && !sshSupportsDSAKey(t) {
+				t.Skip("ssh-keygen cannot parse ssh-dss keys because this OpenSSH version no longer reports ssh-dss as a supported key algorithm")
+			}
 			require.NoError(t, err)
 			assert.Equal(t, test.expType, typ)
 			assert.Equal(t, test.expLength, length)
 		})
 	}
+}
+
+func sshSupportsDSAKey(t *testing.T) bool {
+	t.Helper()
+
+	output, err := exec.Command("ssh", "-Q", "key").Output()
+	require.NoError(t, err)
+	return strings.Contains("\n"+string(output), "\nssh-dss\n")
 }
